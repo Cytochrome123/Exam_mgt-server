@@ -2,7 +2,7 @@ const express = require('express');
 const passport = require('passport');
 
 const { examinerController, examController, questionController, studentController } = require('../controllers')
-const { autM } = require('../auth');
+// const { autM } = require('../auth');
 
 module.exports = () => {
     const router = express.Router();
@@ -21,11 +21,17 @@ module.exports = () => {
     router.get('/exam/:examId/questions', passport.authenticate('jwt'), questionController.viewExamQuestions);
     router.get('/exam/:examId/question/:id', passport.authenticate('jwt'), questionController.viewEachQuestion);
 
-    router.get('/students', autM, studentController.getStudents);
-    router.post('/student/assign', autM, studentController.assignStudents);
+    // router.get('/students', autM, studentController.getStudents);
+    // router.post('/student/assign', autM, studentController.assignStudents);
+    // // uodate and delte
+
+    // router.get('/exam/:examId/students', autM, studentController.viewAssignedStudents);
+
+    router.get('/students', passport.authenticate('jwt'), studentController.getStudents);
+    router.post('/student/assign', passport.authenticate('jwt'), studentController.assignStudents);
     // uodate and delte
 
-    router.get('/exam/:examId/students', autM, studentController.viewAssignedStudents);
+    router.get('/exam/:examId/students', passport.authenticate('jwt'), studentController.viewAssignedStudents);
     // 571758
     return router;
 }
