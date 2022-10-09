@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 const createToken = (userData) => {
-    let private = process.env.jwtSecret;
+    let private = process.env.JWT_SECRET;
     let userObj = {
         firstName: userData.firstName,
 		lastName: userData.lastName,
