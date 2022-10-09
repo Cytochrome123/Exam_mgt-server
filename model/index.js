@@ -1,0 +1,9 @@
+exports.User = require('./user');
+exports.College = require('./college');
+exports.Student = require('./student');
+// exports.Examiner = require('./examiner');
+exports.DefaultCourse = require('./defaultCourses');
+exports.ExaminerCourse = require('./examinerCourses');
+exports.Exam = require('./exam');
+exports.Question = require('./question');
+exports.Assign = require('./assign');
