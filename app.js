@@ -1,4 +1,4 @@
-const dotenv = require('dotenv').config();
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
@@ -47,6 +47,7 @@ app.use('/api/examiner', examiner())
 //     console.log(req.body);
 // })
 
-app.listen(process.env.PORT || 5000, () => {
-    console.log('Server Connected!!!')
+app.listen(process.env.PORT || 5000, (err) => {
+    if (err) console.log(err);
+    else console.log('Server Connected!!!');
 })
