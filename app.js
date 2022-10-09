@@ -17,13 +17,24 @@ const { basic, admin, subAdmin, examiner } = require('./routes')
 // app.use(express.urlencoded({ extended: false }));
 app.use(express.json())
 app.use(cors({
-    origin: "http://localhost:3000", // allow to server to accept request from different origin
+    origin: ["http://localhost:3000", 'https://exam-mgt-server.herokuapp.com/'], // allow to server to accept request from different origin
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true, // allow session cookie from browser to pass through
     optionsSuccessStatus: 200,
 
 }))
 // app.use(cors());
+
+// origin: function (origin, callback) {
+//     // bypass the requests with no origin (like curl requests, mobile apps, etc )
+//     if (!origin) return callback(null, true);
+ 
+//     if (allowedDomains.indexOf(origin) === -1) {
+//       var msg = `This site ${origin} does not have an access. Only specific domains are allowed to access it.`;
+//       return callback(new Error(msg), false);
+//     }
+//     return callback(null, true);
+// }
 
 app.use(cookieParser());
 app.use(session({
