@@ -1,4 +1,3 @@
-const dotenv = require('dotenv').config();
 // const passport =  require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const JwtStrategy = require('passport-jwt').Strategy;
@@ -91,7 +90,7 @@ module.exports = (passport) => {
 		new JwtStrategy(
 			{
 				jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken('Authorization'),
-				secretOrKey: process.env.jwtSecret,
+				secretOrKey: process.env.JWT_SECRET,
 			},
 			async (jwtPayload, done) => {
 				let query = { _id: mongoose.Types.ObjectId(jwtPayload.userId) };
