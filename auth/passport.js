@@ -90,7 +90,9 @@ module.exports = (passport) => {
 		new JwtStrategy(
 			{
 				jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken('Authorization'),
-				secretOrKey: process.env.JWT_SECRET,
+				// secretOrKey: process.env.JWT_SECRET,
+                secretOrKey: 'hud',
+
 			},
 			async (jwtPayload, done) => {
 				let query = { _id: mongoose.Types.ObjectId(jwtPayload.userId) };
