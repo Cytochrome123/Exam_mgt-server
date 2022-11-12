@@ -27,11 +27,11 @@ module.exports = () => {
 
     // router.get('/exam/:examId/students', autM, studentController.viewAssignedStudents);
 
-    router.get('/students', passport.authenticate('jwt'), studentController.getStudents);
-    router.post('/student/assign', passport.authenticate('jwt'), studentController.assignStudents);
+    router.get('/students', passport.authenticate('jwt'), examinerController.getStudents);
+    router.post('/student/assign', passport.authenticate('jwt'), examinerController.assignStudents);
     // uodate and delte
 
-    router.get('/exam/:examId/students', passport.authenticate('jwt'), studentController.viewAssignedStudents);
+    router.get('/exam/:examId/students', passport.authenticate('jwt'), examinerController.viewAssignedStudents);
     // 571758
     return router;
 }

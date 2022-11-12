@@ -35,19 +35,13 @@ const queries = {
 	},
 
     aggregateDataAndPopulate: (model, pipeline, populateOptions) => {
-		return new Promise((resolve, reject) => {
-			model.aggregate(pipeline, (err, data) => {
-				if (err) {
-					reject(err);
-				}
-				model.populate(data, populateOptions, (err, populatedDocs) => {
-					if (err) reject(err);
-					resolve(populatedDocs);
-				});
-			});
-		});
-	},
-
+        return (
+            model.aggregate(pipeline, (err, data) => {
+                model.populate(data, populateOptions)
+            })
+        )
+    },
+    
     delete: (model, condition, options) => {
         return model.findByIdAndDelete(condition, options);
     }

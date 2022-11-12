@@ -7,3 +7,4 @@ exports.ExaminerCourse = require('./examinerCourses');
 exports.Exam = require('./exam');
 exports.Question = require('./question');
 exports.Assign = require('./assign');
+exports.Answer = require('./answer');

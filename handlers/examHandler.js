@@ -11,6 +11,7 @@ class Exams {
             let condition = { examinerId: mongoose.Types.ObjectId(my_details._id)};
             let projection = {
                 examinerId: 1,
+                subject: 1,
                 password: 1,
                 createdDate: 1,
                 modifiedDate: 1,

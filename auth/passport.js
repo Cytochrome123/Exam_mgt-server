@@ -90,8 +90,7 @@ module.exports = (passport) => {
 		new JwtStrategy(
 			{
 				jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken('Authorization'),
-				// secretOrKey: process.env.JWT_SECRET,
-                secretOrKey: 'hud',
+				secretOrKey: process.env.JWT_SECRET,
 
 			},
 			async (jwtPayload, done) => {

@@ -1,43 +1,62 @@
 const { studentHandler } = require("../handlers");
 
 const student = {
-    getStudents: async (req, res) => {
+    
+    getExams: async (req, res) => {
         try {
             const my_details = req.user;
-            const {0: examId} = req.query
-            // console.log(examId)
-            const response = await studentHandler.getStudents(my_details, examId);
+            console.log(my_details)
 
-            res.status(response.status).json({...response.data});
+            const response = await studentHandler.getExams(my_details);
 
+            res.status(200).json({...response.data})
         } catch (err) {
             throw err;
         }
     },
 
-    assignStudents: async (req, res) => {
+    getExamQuestion: async (req, res) => {
         try {
             const my_details = req.user;
-            const {0: examId} = req.query
-            // const payload = req.body;
-            const { selectedStudents } = req.body;
+            const { id } = req.params;
+            console.log(req.params)
+            const { questionNum } = req.query
+            // console.log(req.query)
+            // console.log(req.params)
 
-            const response = await studentHandler.assignStudents(my_details, examId, selectedStudents);
+            // const payload = {...req.params, ...req.query}
+            // console.log(payload);
 
-            res.status(response.status).json({...response.data});
-
-        } catch (err) {
-            throw err;
-        }
-    },
-
-    viewAssignedStudents: async (req, res) => {
-        try {
-            const { examId } = req.params;
-
-            const response = await studentHandler.viewAssignedStudents(examId);
+            const response = await studentHandler.getExamQuestion(my_details, id, questionNum);
 
             res.status(response.status).json({...response.data})
+
+        } catch (err) {
+            throw err;
+        }
+    },
+
+    saveAnswer: async (req, res) => {
+        try {
+            const my_details = req.user;
+            const payload = req.body
+
+            const response = await studentHandler.saveAnswer(my_details, payload);
+
+            res.status(response.status).json(response.msg);
+        } catch (err) {
+            throw err;
+        }
+    },
+
+    submitExam: async (req, res) => {
+        try {
+            const my_details = req.user;
+            const payload = req.params;
+
+            const response = await studentHandler.submitExam(my_details, payload);
+
+            res.status(response.status).json(response.data.msg);
         } catch (err) {
             throw err;
         }

@@ -27,6 +27,7 @@ const assignSchema = new Schema({
 	marksObtained: { type: Number, default: 0 },
 	attemptedQuestionsCount: { type: Number, default: 0 },
 	correctAnswerCount: { type: Number, default: 0 },
+	// questonsMarking --- change to
 	answerMarkings: {
 		type: [
 			{

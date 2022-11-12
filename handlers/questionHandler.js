@@ -7,7 +7,7 @@ const { Exam, Question } = require("../model");
 const question = {
     addNewQuestion: async (my_details, questionData) => {
         try {
-            console.log(questionData.examId)
+            console.log(questionData)
             let conditions = { _id: questionData.examId };
             let projections = { totalMarks: 1 };
             let options = { lean: true };
@@ -33,11 +33,17 @@ console.log(questionDetails)
 					: null,
 				questionMark: questionData.questionMark,
 				optionType: questionData.optionType,
-                correctAnswer: questionData.optionsList,
-				options: questionData.optionsList,
+                correctAnswer: [],
+				options: questionData.options,
 				status: 'active'
             };
-
+            if (queData.options.length !== 0) {
+                queData.options.forEach(option => {
+                    if (option.answer) queData.correctAnswer.push(option.value)
+                    console.log(queData.correctAnswer)
+                });
+            }
+console.log(queData)
             // if(questionDetails.length !== 0) {
             //     if (questionDetails[0].examMark + parseInt(questionData.questionMark) > examDetails.totalMarks ) {
             //         return {
@@ -84,7 +90,7 @@ console.log('created')
                 }
 
                 return {
-                    status: 400,
+                    status: 201,
                     data: { msg: 'Question created !!!'}
                 }
             }

@@ -12,7 +12,7 @@ passportLocalStrategy(passport);
 
 const db = require('./db');
 // require('./db').connection
-const { basic, admin, subAdmin, examiner } = require('./routes')
+const { basic, admin, subAdmin, examiner, student } = require('./routes')
 
 // app.use(express.urlencoded({ extended: false }));
 app.use(express.json())
@@ -53,7 +53,8 @@ app.use(passport.session());
 app.use('/api', basic());
 app.use('/api/admin', admin());
 app.use('/api/subAdmin', subAdmin());
-app.use('/api/examiner', examiner())
+app.use('/api/examiner', examiner());
+app.use('/api/student', student());
 
 // app.post('/api/signup', (req,res)=>{
 //     console.log(req.body);

@@ -39,6 +39,9 @@ const student = {
                     $project: {
                         status: 1,
                         // examId: 1,
+                        marksObtained: 1,
+                        attemptedQuestionsCount: 1,
+                        correctAnswerCount: 1,
 						'allExams._id': 1,
 						'allExams.examDate': 1,
 						'allExams.course': 1,
@@ -92,8 +95,8 @@ const student = {
 
     getExamQuestion: async (my_details, examId, questionNum) => {
         try {
-            console.log(examId)
-            console.log(questionNum)
+            // console.log(examId)
+            // console.log(questionNum)
             let conditions = {
                 $and: [
                     { studentId: mongoose.Types.ObjectId(my_details._id) },
@@ -108,7 +111,7 @@ const student = {
             let options = { lean: true }
 
             const assignedExam = await queries.findOne( Assign, conditions, projection, options )
-console.log(assignedExam)
+
             if (assignedExam) {
                 conditions = {
                     $and: [
@@ -128,8 +131,8 @@ console.log(assignedExam)
                 };
 
                 options = {
-                    // skip: questionNum
-                    skip: 14,
+                    skip: questionNum,
+                    // skip: 14,
                     lean: true,
                     // limit: 1
                 }
@@ -163,7 +166,8 @@ console.log(assignedExam)
                     conditions = {
                         $and: [
                             { userId: mongoose.Types.ObjectId(my_details._id) },
-                            { examId: mongoose.Types.ObjectId(assignedExam._id) },
+                            // { examId: mongoose.Types.ObjectId(assignedExam._id) },
+                            { examId: mongoose.Types.ObjectId(examId) },
                             { questionId: mongoose.Types.ObjectId(question._id) },
                         ]
                     };
@@ -279,14 +283,19 @@ console.log(existingAnswer)
 
     submitExam: async (my_details, payload) => {
         try {
+            // let condition  = { examId: mongoose.Types.ObjectId(payload.id) };
+            // let projection = { id: 1 };
+            let options = { lean: true };
+
+            // const exam = await queries.findOne( Assign, condition, projection, options );
+
             let aggregatePipeline = [
                 {
                     $match: {
                         $and: [
                             { userId: mongoose.Types.ObjectId(my_details._id) },
+                            // { examId: mongoose.Types.ObjectId(exam._id) },
                             { examId: mongoose.Types.ObjectId(payload.id) }
-                            // {status: 'ATTEMPTED'}
-                            // {_id: mongoose.Types.ObjectId("63627acbc2a05d2d97179f88")}
                         ]
                     }
                 },
@@ -299,15 +308,15 @@ console.log(existingAnswer)
                     }
                 },
                 { $unwind: '$questionData' },
-                // {
-                //     $lookup: {
-                //         from: 'exams',
-                //         localField: 'examId',
-                //         foreignField: '_id',
-                //         as: 'examData'
-                //     }
-                // },
-                // { $unwind: '$examData' },
+                {
+                    $lookup: {
+                        from: 'exams',
+                        localField: 'examId',
+                        foreignField: '_id',
+                        as: 'examData'
+                    }
+                },
+                { $unwind: '$examData' },
                 {
                     $project: {
                         status: 1,
@@ -315,16 +324,89 @@ console.log(existingAnswer)
 						'questionData.correctAnswer': 1,
 						'questionData.questionMark': 1,
 						'questionData.optionType': 1,
-						// 'examData.negativeMarks': 1,
+						'examData.negativeMarks': 1,
                     }
                 }
             ];
 
-            let options = { lean: true };
+            
 
             let answers = await queries.aggregateData( Answer, aggregatePipeline, options );
 
-            console.log(answers)
+            console.log(answers);
+
+            let marksObtained = 0;
+            let correctAnswerCount = 0;
+            let wrongAnswerCount = 0;
+            let attemptedQuestionsCount = 0;
+
+            answers.forEach((answer, index) => {
+                
+                if (answer.status === 'ATTEMPTED') attemptedQuestionsCount++;
+    
+                if (answer.questionData.optionType === 'single') {
+    
+                    if (answer.answer[0] === answer.questionData.correctAnswer[0]) {
+                        marksObtained += answer.questionData.questionMark;
+                        correctAnswerCount++;
+                        console.log('çalculating');
+                    } else {
+                        marksObtained -= answer.examData.negativeMarks;
+                        wrongAnswerCount++;
+                        console.log('not çalculating');
+                    }
+                } else {
+                    let included = 0;
+                    answer.questionData.correctAnswer.forEach(correct => {
+                        if (answer.answer.includes(correct)) {
+                            included++;
+
+                        }
+                    })
+                    // console.log(included)
+                    if (included === answer.questionData.correctAnswer.length) {
+                        marksObtained += answer.questionData.questionMark;
+                        correctAnswerCount++;
+                        console.log('multi-çalculating');
+                    } else {
+                        marksObtained -= answer.examData.negativeMarks;
+                        wrongAnswerCount++;
+                        console.log('mnot çalculating');
+                    }
+                }
+            })
+
+            let condition = {
+				$and: [
+					{ examId: mongoose.Types.ObjectId(payload.id) },
+					{ studentId: mongoose.Types.ObjectId(my_details._id) },
+				],
+			};
+
+            let update = {
+				status: 'submitted',
+				marksObtained: marksObtained,
+				correctAnswerCount: correctAnswerCount,
+                wrongAnswerCount: wrongAnswerCount,
+				attemptedQuestionsCount: attemptedQuestionsCount,
+				modifiedDate: Date.now(),
+			};
+
+            options = { lean: true, new: true };
+
+            const updated = await queries.findOneAndUpdate( Assign, condition, update, options);
+
+            if (updated) {
+                return {
+                    status: 200,
+                    data: { msg: 'Submitted'}
+                }
+            } else {
+                return {
+                    status: 200,
+                    data: { msg: 'Invalid Exam Id'}
+                }
+            }
         } catch (err) {
             throw err;
         }

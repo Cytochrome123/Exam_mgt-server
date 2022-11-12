@@ -8,7 +8,7 @@ const question = {
 
             const response = await questionHandler.addNewQuestion(my_details, questionData);
 
-            res.status(response.status).json(response.msg);
+            res.status(response.status).json(response.data);
         } catch (err) {
             throw err;
         }

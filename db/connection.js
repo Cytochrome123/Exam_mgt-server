@@ -5,10 +5,9 @@ const mongoose = require('mongoose');
 
 // const url = `mongodb://${process.env.MONGO_HOSTNAME}:${process.env.MONGO_PORT}/${process.env.MONGO_DB}`;
 
-const url = `mongodb+srv://Hud:hud%40exam-mgt@cluster0.rqnecsi.mongodb.net/?retryWrites=true&w=majority`;
 
 
-mongoose.connect(url, (err, conn) => {
+mongoose.connect(process.env.MONGO_URL, (err, conn) => {
 	if (err) {
 		console.log('Mongo error ', err);
 	} else {
