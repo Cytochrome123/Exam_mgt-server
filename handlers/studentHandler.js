@@ -70,9 +70,7 @@ const student = {
             let endOfDay = moment().endOf('day').valueOf();
             // const end = new Date(2020, 1, 1, 1, 1);
             // end.setUTCHours(23, 59, 59, 999);
-            console.log(startOfDay)
-            console.log(endOfDay)
-            // console.log(end)
+            
             let todaySExams = [];
             let conductedExams = [];
             let upcomingExams = [];
@@ -95,8 +93,6 @@ const student = {
 
     getExamQuestion: async (my_details, examId, questionNum) => {
         try {
-            // console.log(examId)
-            // console.log(questionNum)
             let conditions = {
                 $and: [
                     { studentId: mongoose.Types.ObjectId(my_details._id) },
@@ -176,7 +172,6 @@ const student = {
                     options = { lean: true };
 
                     const existingAnswer = await queries.findOne( Answer, conditions, projection, options );
-console.log(existingAnswer)
                     return {
                         status: 200,
                         data: { assignedExam, question, existingAnswer }
@@ -249,27 +244,6 @@ console.log(existingAnswer)
                         msg: 'Couldn\'t update answer'
                     }
                 }
-
-                conditions = {
-                    $and: [
-                        { studentId: mongoose.Types.ObjectId(my_details._id) },
-                        { examId: mongoose.Types.ObjectId(payload.examId) },
-                        { 'answerMarkings.questionId': mongoose.Types.ObjectId(question._id) }
-                    ]
-                };
-
-                const update = { 
-                    'answerMarkings.status': 
-                    payload.answer === '' && payload.status === 'REVIEW' 
-                    ? 'not-attempted and marked for review' :
-                    payload.answer !== '' && payload.status === 'REVIEW'
-                    ? 'attempted and marked for review' :
-                    'attempted'
-                };
-
-                options = { lean: true, new: true };
-
-                await queries.findOneAndUpdate( Assign, conditions, update, options )
             } else {
                 return {
                     status: 404,
@@ -349,11 +323,11 @@ console.log(existingAnswer)
                     if (answer.answer[0] === answer.questionData.correctAnswer[0]) {
                         marksObtained += answer.questionData.questionMark;
                         correctAnswerCount++;
-                        console.log('çalculating');
+                        // console.log('çalculating');
                     } else {
                         marksObtained -= answer.examData.negativeMarks;
                         wrongAnswerCount++;
-                        console.log('not çalculating');
+                        // console.log('not çalculating');
                     }
                 } else {
                     let included = 0;
@@ -367,11 +341,11 @@ console.log(existingAnswer)
                     if (included === answer.questionData.correctAnswer.length) {
                         marksObtained += answer.questionData.questionMark;
                         correctAnswerCount++;
-                        console.log('multi-çalculating');
+                        // console.log('multi-çalculating');
                     } else {
                         marksObtained -= answer.examData.negativeMarks;
                         wrongAnswerCount++;
-                        console.log('mnot çalculating');
+                        // console.log('mnot çalculating');
                     }
                 }
             })

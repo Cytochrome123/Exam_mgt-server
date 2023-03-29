@@ -100,7 +100,7 @@ class Exams {
                 populate: {
                     path: 'courseId',
                     select: 'name',
-                    model: 'DefaultCourse'
+                    model: 'DefaultCourse' 
                 },
 
                 model: 'ExaminerCourse'

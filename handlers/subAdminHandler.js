@@ -228,7 +228,7 @@ const subAdmin = {
 
     addNewStudent: async (my_details, student_details) => {
         try {
-            console.log('adding')
+            // console.log('adding')
             let condition = { email: student_details.email };
 
             let projection = {};
@@ -237,7 +237,7 @@ const subAdmin = {
             let existingUser = await queries.findOne( User, condition, projection, option );
             
             condition = { studentId: student_details.studentId }
-            console.log('processing')
+            // console.log('processing')
             // await queries.create( Student, student_details )
             let existingStudent = await queries.findOne( Student, condition, projection, option );
 
@@ -247,32 +247,6 @@ const subAdmin = {
                         status: 400,
                         msg: 'The student with the ID specified already exists'
                     }
-                // } else if(existingUser.email === student_details.email) {
-                //     return {
-                //         status: 400,
-                //         msg: 'Email already exists'
-                //     }
-
-                // } else if(existingUser && !existingStudent) {
-                //     let newStudentData = {
-                //         userId: existingUser._id,
-                // 		fatherName: student_details.fatherName,
-                // 		motherName: student_details.motherName,
-                // 		dob: parseInt(student_details.dob, 10),
-                //         // dob: student_details.dob,
-                // 		address: student_details.address,
-                // 		studentId: student_details.studentId,
-                // 		gender: student_details.gender,
-                // 		state: student_details.state,
-                // 		city: student_details.city,
-                //     };
-    
-                //     await queries.create( Student, newStudentData );
-
-                //     return {
-                //         status: 200,
-                //         msg: 'The user exists and the student has been created'
-                //     }
                 } else {
                     let newStudentData = {
                         userId: existingUser._id,
@@ -333,7 +307,7 @@ const subAdmin = {
                 }
             }
         } catch(err) {
-            console.log('notadding')
+            // console.log('notadding')
             throw err;
         }
     },

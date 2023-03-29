@@ -7,7 +7,6 @@ const { Exam, Question } = require("../model");
 const question = {
     addNewQuestion: async (my_details, questionData) => {
         try {
-            console.log(questionData)
             let conditions = { _id: questionData.examId };
             let projections = { totalMarks: 1 };
             let options = { lean: true };
@@ -23,7 +22,6 @@ const question = {
             ];
 
             let questionDetails = await queries.aggregateData( Question, aggregatePipeline );
-console.log(questionDetails)
             const queData = {
                 examinerId: my_details._id,
                 examId: questionData.examId,
@@ -43,15 +41,6 @@ console.log(questionDetails)
                     console.log(queData.correctAnswer)
                 });
             }
-console.log(queData)
-            // if(questionDetails.length !== 0) {
-            //     if (questionDetails[0].examMark + parseInt(questionData.questionMark) > examDetails.totalMarks ) {
-            //         return {
-            //             status: 400,
-            //             data: { msg: 'Total Marks exceeded !!!'}
-            //         }
-            //     }
-            // }
 
             if (
                     questionDetails.length !== 0 && 
@@ -63,7 +52,6 @@ console.log(queData)
                 }
             } else {
                 await queries.create( Question, queData );
-console.log('created')
                 questionDetails = await queries.aggregateData( Question, aggregatePipeline );
 
                 let update; 

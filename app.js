@@ -24,18 +24,6 @@ app.use(cors({
     optionsSuccessStatus: 200,
 
 }))
-// app.use(cors());
-
-// origin: function (origin, callback) {
-//     // bypass the requests with no origin (like curl requests, mobile apps, etc )
-//     if (!origin) return callback(null, true);
- 
-//     if (allowedDomains.indexOf(origin) === -1) {
-//       var msg = `This site ${origin} does not have an access. Only specific domains are allowed to access it.`;
-//       return callback(new Error(msg), false);
-//     }
-//     return callback(null, true);
-// }
 
 app.use(cookieParser());
 app.use(session({
@@ -56,9 +44,6 @@ app.use('/api/subAdmin', subAdmin());
 app.use('/api/examiner', examiner());
 app.use('/api/student', student());
 
-// app.post('/api/signup', (req,res)=>{
-//     console.log(req.body);
-// })
 
 app.listen(process.env.PORT || 5000, (err) => {
     if (err) console.log(err);

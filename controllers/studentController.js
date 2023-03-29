@@ -20,12 +20,7 @@ const student = {
             const my_details = req.user;
             const { id } = req.params;
             console.log(req.params)
-            const { questionNum } = req.query
-            // console.log(req.query)
-            // console.log(req.params)
-
-            // const payload = {...req.params, ...req.query}
-            // console.log(payload);
+            const { questionNum } = req.query;
 
             const response = await studentHandler.getExamQuestion(my_details, id, questionNum);
 

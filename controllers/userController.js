@@ -22,7 +22,7 @@ const user = {
             console.log(req.isAuthenticated())
             console.log(req.user)
 
-            return response; ///////////////////////////////////////////////////////
+            return response;
         } catch(err) {
             throw err;
         }
@@ -30,9 +30,7 @@ const user = {
 
     getCollegeList: async (req,res) => {
         try {
-            let response = await userHandler.getCollegeList()
-            // .then(res => console.log(res))
-            // .catch(e => console.log(e));
+            let response = await userHandler.getCollegeList();
             console.log(response.status);
             res.status(response.status).json(response.data)
         }
